@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
+import com.proyectofct.salinappservice.BienvenidaActivity;
 import com.proyectofct.salinappservice.Modelos.ConfiguraciónDB.ConfiguracionesGeneralesDB;
 import com.proyectofct.salinappservice.R;
 
@@ -49,22 +49,30 @@ public class ListaProductosPublicadosAdapter extends RecyclerView.Adapter<Produc
     @NonNull
     @Override
     public ProductoPublicadoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mItemView = mInflater.inflate(R.layout.item_recyclerview_producto_publicado, parent, false);
+        View mItemView;
+        if(BienvenidaActivity.EMPRESA == false) {
+            mItemView = mInflater.inflate(R.layout.item_recyclerview_producto_publicado, parent, false);
+        }else{
+            mItemView = mInflater.inflate(R.layout.item_recyclerview_imagenes_producto, parent, false);
+        }
         return new ProductoPublicadoViewHolder(mItemView, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductoPublicadoViewHolder holder, int position) {
-        ProductosPublicados productoPublicadoActual = listaProductosPublicados.get(position);
-        holder.txtMarcaProductoPublicado.setText(String.valueOf("Marca : " + productoPublicadoActual.getP().getMarca()));
-        holder.txtModeloProductoPublicado.setText(String.valueOf("Modelo : " + productoPublicadoActual.getP().getModelo()));
-        holder.txtPrecioProductoPublicado.setText(String.valueOf("Precio : " + productoPublicadoActual.getPrecioventa() + " €"));
-        holder.txtStockProductoPublicado.setText(String.valueOf("Cantidad : " + productoPublicadoActual.getCantidad()));
-        holder.txtDescripciónProductoPublicado.setText(String.valueOf("Descripción : " + productoPublicadoActual.getP().getDescripción()));
-        if(productoPublicadoActual.getP().getImagen() == null){
+        ProductosPublicados productosPublicadosActual = listaProductosPublicados.get(position);
+        if(BienvenidaActivity.EMPRESA == false) {
+            holder.txtMarcaProductoPublicado.setText(String.valueOf("Marca : " + productosPublicadosActual.getP().getMarca()));
+            holder.txtPrecioProductoPublicado.setText(String.valueOf("Precio : " + productosPublicadosActual.getPrecioventa() + " €"));
+            holder.txtStockProductoPublicado.setText(String.valueOf("Cantidad : " + productosPublicadosActual.getCantidad() + " unidades"));
+            holder.txtDescripciónProductoPublicado.setText(String.valueOf("Descripción : " + productosPublicadosActual.getP().getDescripción()));
+        }
+        holder.txtModeloProductoPublicado.setText(String.valueOf("Modelo : " + productosPublicadosActual.getP().getModelo()));
+
+        if(productosPublicadosActual.getP().getImagen() == null){
             holder.imgProductoPublicado.setImageResource(R.drawable.producto);
         } else{
-            holder.imgProductoPublicado.setImageBitmap(blob_to_bitmap(productoPublicadoActual.getP().getImagen(), ConfiguracionesGeneralesDB.ANCHO_FOTO, ConfiguracionesGeneralesDB.ALTO_FOTO));
+            holder.imgProductoPublicado.setImageBitmap(blob_to_bitmap(productosPublicadosActual.getP().getImagen(), ConfiguracionesGeneralesDB.ANCHO_FOTO, ConfiguracionesGeneralesDB.ALTO_FOTO));
 
         }
     }
