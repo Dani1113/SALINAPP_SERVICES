@@ -1,10 +1,13 @@
 package com.proyectofct.salinappservice.Controladores;
 
+import android.text.Editable;
+
 import com.proyectofct.salinappservice.Clases.Productos.ProductosPublicados;
 import com.proyectofct.salinappservice.Tareas.TareasProductoPublicado.TareaBuscarProductoPublicado;
 import com.proyectofct.salinappservice.Tareas.TareasProductoPublicado.TareaCantidadProductoPublicado;
 import com.proyectofct.salinappservice.Tareas.TareasProductoPublicado.TareaObtenerProductoPublicado;
 import com.proyectofct.salinappservice.Tareas.TareasProductoPublicado.TareaObtenerProductoPublicadoPorEmpresa;
+import com.proyectofct.salinappservice.Tareas.TareasProductoPublicado.TareaObtenerVariantesProductoPublicado;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -60,10 +63,12 @@ public class ProductoPublicadoController {
         return productosPublicadosDevuelto;
     }
 
-    //REPASAR MÉTODO
-    public static ArrayList<ProductosPublicados> buscarProductoPublicado(String cod_producto){
+
+    //REPASAR MÉTODO PARA BUSCAR PRODUCTOS
+    public static ArrayList<ProductosPublicados> buscarProductoPublicado(int página, String marca){
         ArrayList<ProductosPublicados> productoPublicadoEncontrado = null;
-        FutureTask tarea = new FutureTask(new TareaBuscarProductoPublicado(cod_producto));
+        FutureTask tarea = new FutureTask(new TareaBuscarProductoPublicado(marca, página));
+
         ExecutorService es = Executors.newSingleThreadExecutor();
         es.submit(tarea);
         try {
@@ -84,9 +89,9 @@ public class ProductoPublicadoController {
         return productoPublicadoEncontrado;
     }
 
-    public static int obtenerCantidadProductoPublicado() {
+    public static int obtenerCantidadProductoPublicado(String codEmpresa) {
         int cantidadProductoPublicado = 0;
-        FutureTask tarea = new FutureTask (new TareaCantidadProductoPublicado());
+        FutureTask tarea = new FutureTask (new TareaCantidadProductoPublicado(codEmpresa));
         ExecutorService es = Executors.newSingleThreadExecutor();
         es.submit(tarea);
         try {
@@ -105,5 +110,28 @@ public class ProductoPublicadoController {
             e.printStackTrace();
         }
         return cantidadProductoPublicado;
+    }
+
+    public static ArrayList<ProductosPublicados> obtenerVariantesProductoPublicado(String cod_producto) {
+        ArrayList<ProductosPublicados> productosPublicadosDevuelto = null;
+        FutureTask tarea = new FutureTask(new TareaObtenerVariantesProductoPublicado(cod_producto));
+        ExecutorService es = Executors.newSingleThreadExecutor();
+        es.submit(tarea);
+        try {
+            productosPublicadosDevuelto = (ArrayList<ProductosPublicados>) tarea.get();
+            es.shutdown();
+            try {
+                if (!es.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                    es.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                es.shutdownNow();
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return productosPublicadosDevuelto;
     }
 }

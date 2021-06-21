@@ -10,30 +10,51 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class ProductosPublicados implements Serializable {
-    private int idproductoempresa;
+    private int idProductoEmpresa;
     private int cantidad;
     private double precioventa;
     private boolean habilitado;
     private boolean archivado;
+    private int id_foto;
     private Producto p;
     private Empresa e;
 
-    public ProductosPublicados(int idproductoempresa, int cantidad, double precioventa, boolean habilitado, boolean archivado, Producto p, Empresa e) {
-        this.idproductoempresa = idproductoempresa;
+    public ProductosPublicados(int idproductoempresa, int cantidad, double precioventa, boolean habilitado, boolean archivado, Producto p, Empresa e, int id_foto) {
+        this.idProductoEmpresa = idproductoempresa;
         this.cantidad = cantidad;
         this.precioventa = precioventa;
         this.habilitado = habilitado;
         this.archivado = archivado;
         this.p = p;
         this.e = e;
+        this.id_foto = id_foto;
     }
 
-    public int getIdproductoempresa() {
-        return idproductoempresa;
+    public ProductosPublicados(int idproductoempresa, int cantidad, double precioventa, boolean habilitado, boolean archivado, Producto p, Empresa e) {
+        this.idProductoEmpresa = idproductoempresa;
+        this.cantidad = cantidad;
+        this.precioventa = precioventa;
+        this.habilitado = habilitado;
+        this.archivado = archivado;
+        this.p = p;
+        this.e = e;
+
     }
 
-    public void setIdproductoempresa(int idproductoempresa) {
-        this.idproductoempresa = idproductoempresa;
+    public int getId_foto() {
+        return id_foto;
+    }
+
+    public void setId_foto(int id_foto) {
+        this.id_foto = id_foto;
+    }
+
+    public int getIdProductoEmpresa() {
+        return idProductoEmpresa;
+    }
+
+    public void setIdProductoEmpresa(int idProductoEmpresa) {
+        this.idProductoEmpresa = idProductoEmpresa;
     }
 
     public int getCantidad() {
@@ -89,25 +110,17 @@ public class ProductosPublicados implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductosPublicados that = (ProductosPublicados) o;
-        return idproductoempresa == that.idproductoempresa;
+        return idProductoEmpresa == that.idProductoEmpresa;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-        return Objects.hash(idproductoempresa);
+        return Objects.hash(idProductoEmpresa);
     }
 
     @Override
     public String toString() {
-        return "ProductosPublicados{" +
-                "idproductoempresa=" + idproductoempresa +
-                ", cantidad=" + cantidad +
-                ", precioventa=" + precioventa +
-                ", habilitado=" + habilitado +
-                ", archivado=" + archivado +
-                ", p=" + p +
-                ", e=" + e +
-                '}';
+        return ((Moda) p).getTalla() + " " + ((Moda) p).getColor();
     }
 }
